@@ -7,6 +7,8 @@
 
 `bevy_curvo` is a helper library for rendering curves and surfaces modeled with [Curvo](https://github.com/mattatz/curvo) directly within the [Bevy](https://github.com/bevyengine/bevy) environment.
 
+[Demo](https://github.com/mattatz/bevy_curvo/assets/1085910/f5e99a0e-7ad9-4280-8013-efb9940a4597)
+
 ## Usage
 
 ```rust

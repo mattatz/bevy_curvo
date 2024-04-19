@@ -123,40 +123,43 @@ fn update_ui(
     let has_profile_curves = curves.iter().count() > 0;
     let current_state = current_state.get();
 
-    egui::Window::new("bevy_curvo example").collapsible(false).drag_to_scroll(false).show(contexts.ctx_mut(), |ui| {
-        ui.heading("mode");
-        ui.group(|group| {
-            if group
-                .add_enabled(
-                    true,
-                    egui::Button::new("idle").selected(matches!(current_state, AppState::Idle)),
-                )
-                .clicked()
-            {
-                next_state.set(AppState::Idle);
-            }
-            if group
-                .add_enabled(
-                    true,
-                    egui::Button::new("interpolate curve")
-                        .selected(matches!(current_state, AppState::InterpolateCurve)),
-                )
-                .clicked()
-            {
-                next_state.set(AppState::InterpolateCurve);
-            }
-            if group
-                .add_enabled(
-                    has_profile_curves,
-                    egui::Button::new("extrude curve")
-                        .selected(matches!(current_state, AppState::ExtrudeCurve)),
-                )
-                .clicked()
-            {
-                next_state.set(AppState::ExtrudeCurve);
-            }
+    egui::Window::new("bevy_curvo example")
+        .collapsible(false)
+        .drag_to_scroll(false)
+        .show(contexts.ctx_mut(), |ui| {
+            ui.heading("mode");
+            ui.group(|group| {
+                if group
+                    .add_enabled(
+                        true,
+                        egui::Button::new("idle").selected(matches!(current_state, AppState::Idle)),
+                    )
+                    .clicked()
+                {
+                    next_state.set(AppState::Idle);
+                }
+                if group
+                    .add_enabled(
+                        true,
+                        egui::Button::new("interpolate curve")
+                            .selected(matches!(current_state, AppState::InterpolateCurve)),
+                    )
+                    .clicked()
+                {
+                    next_state.set(AppState::InterpolateCurve);
+                }
+                if group
+                    .add_enabled(
+                        has_profile_curves,
+                        egui::Button::new("extrude curve")
+                            .selected(matches!(current_state, AppState::ExtrudeCurve)),
+                    )
+                    .clicked()
+                {
+                    next_state.set(AppState::ExtrudeCurve);
+                }
+            });
         });
-    });
 }
 
 fn visualize_geometry(_current_state: Res<State<AppState>>, _curves: Query<&ProfileCurve>) {}

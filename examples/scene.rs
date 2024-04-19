@@ -123,7 +123,7 @@ fn update_ui(
     let has_profile_curves = curves.iter().count() > 0;
     let current_state = current_state.get();
 
-    egui::Window::new("bevy_curvo example").show(contexts.ctx_mut(), |ui| {
+    egui::Window::new("bevy_curvo example").collapsible(false).drag_to_scroll(false).show(contexts.ctx_mut(), |ui| {
         ui.heading("mode");
         ui.group(|group| {
             if group

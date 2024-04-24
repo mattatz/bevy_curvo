@@ -13,7 +13,7 @@ use systems::*;
 
 use bevy::{core::Zeroable, prelude::*, window::close_on_esc};
 
-use bevy_egui::{egui, EguiContexts, EguiPlugin};
+use bevy_egui::{egui::{self, util::undoer::Settings}, EguiContexts, EguiPlugin};
 use bevy_infinite_grid::{InfiniteGridBundle, InfiniteGridPlugin};
 
 use bevy_mod_picking::prelude::*;
@@ -42,9 +42,11 @@ struct AppPlugin;
 
 impl Plugin for AppPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
-        app.add_systems(Startup, setup)
-            .add_systems(Update, close_on_esc)
+        app
+            .insert_resource(Setting::default())
             .insert_state(AppState::Idle)
+            .add_systems(Startup, setup)
+            .add_systems(Update, close_on_esc)
             .add_systems(
                 PreUpdate,
                 (absorb_egui_inputs,)

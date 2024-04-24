@@ -27,7 +27,7 @@ pub fn update_loft_curves(
             &others.iter().map(|(_, c, t)| (*c, *t)).collect::<Vec<_>>(),
             0.5,
         );
-        if let Some((prof, tr, c)) = closest {
+        if let Some((prof, _tr, c)) = closest {
             let tess = c.tessellate(None);
             gizmos.linestrip(tess.iter().map(|p| Vec3::from(*p)), Color::YELLOW);
             if mouse_button_input.just_pressed(MouseButton::Left) {

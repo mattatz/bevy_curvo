@@ -5,4 +5,6 @@ pub enum AppState {
     Idle,
     InterpolateCurve,
     ExtrudeCurve,
+    LoftCurves,
+    Select,
 }

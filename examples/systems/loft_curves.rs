@@ -9,7 +9,7 @@ use nalgebra::{Point3, Translation3, Vector3};
 
 use crate::{find_closest_curve, AppState, ExtrudeCurve, ProfileCurve};
 
-pub fn update_extrude_curve(
+pub fn update_loft_curves(
     mut next_state: ResMut<NextState<AppState>>,
     mut commands: Commands,
     mouse_button_input: Res<ButtonInput<MouseButton>>,
@@ -70,7 +70,7 @@ pub fn update_extrude_curve(
     }
 }
 
-pub fn exit_extrude_curve(mut commands: Commands, extrusion: Query<Entity, With<ExtrudeCurve>>) {
+pub fn exit_loft_curves(mut commands: Commands, extrusion: Query<Entity, With<ExtrudeCurve>>) {
     extrusion.iter().for_each(|e| {
         commands.entity(e).despawn();
     });

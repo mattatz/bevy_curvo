@@ -1,6 +1,10 @@
 pub mod extrude_curve;
 pub mod idle;
 pub mod interpolate_curve;
+pub mod loft_curves;
+pub mod transform_curve;
 pub use extrude_curve::*;
 pub use idle::*;
 pub use interpolate_curve::*;
+pub use loft_curves::*;
+pub use transform_curve::*;

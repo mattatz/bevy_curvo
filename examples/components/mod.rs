@@ -11,3 +11,6 @@ pub struct ProfileCurve(pub NurbsCurve3D<f32>);
 
 #[derive(Component, Debug)]
 pub struct ExtrudeCurve(pub NurbsCurve3D<f32>);
+
+#[derive(Component, Debug)]
+pub struct SelectedCurve(pub NurbsCurve3D<f32>);

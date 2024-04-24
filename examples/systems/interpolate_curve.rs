@@ -4,7 +4,7 @@ use bevy_normal_material::material::NormalMaterial;
 use curvo::prelude::NurbsCurve3D;
 use nalgebra::Point3;
 
-use crate::{AppState, InterpolateCurve, LineMaterial, ProfileCurve};
+use crate::{spawn_interp_curve, AppState, InterpolateCurve, LineMaterial, ProfileCurve};
 
 pub fn enter_interpolate_curve(mut commands: Commands) {
     commands.spawn((InterpolateCurve::default(),));
@@ -66,28 +66,14 @@ pub fn exit_interpolate_curve(
         let points: Vec<_> = c.points.iter().map(|p| Point3::from(*p)).collect();
         if points.len() > 3 {
             let degree = (points.len() - 1).min(3);
-            let interpolated = NurbsCurve3D::try_interpolate(&points, degree, None, None).unwrap();
-
-            let mut line = Mesh::new(bevy::render::mesh::PrimitiveTopology::LineStrip, default());
-            let line_vertices = interpolated
-                .tessellate(Some(1e-3))
-                .iter()
-                .map(|p| [p.x, p.y, p.z])
-                .collect();
-            line.insert_attribute(
-                Mesh::ATTRIBUTE_POSITION,
-                VertexAttributeValues::Float32x3(line_vertices),
+            spawn_interp_curve(
+                &mut commands,
+                &mut meshes,
+                &mut line_materials,
+                Color::ALICE_BLUE,
+                &points,
+                degree,
             );
-            commands.spawn((
-                ProfileCurve(interpolated),
-                MaterialMeshBundle {
-                    mesh: meshes.add(line),
-                    material: line_materials.add(LineMaterial {
-                        color: Color::ALICE_BLUE,
-                    }),
-                    ..Default::default()
-                },
-            ));
         }
     });
 }

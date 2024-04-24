@@ -1,13 +1,22 @@
 use bevy::prelude::*;
 use bevy_mod_picking::{selection::PickSelection, PickableBundle};
 
-use bevy_transform_gizmo::GizmoTransformable;
+use bevy_transform_gizmo::{GizmoTransformable, RotationOriginOffset};
 use curvo::prelude::Transformable;
+use nalgebra::Point3;
 
 use crate::{spawn_curve, AppState, LineMaterial, SelectedCurve};
 
-pub fn enter_transform_curve(mut commands: Commands, curves: Query<(Entity, &SelectedCurve)>) {
-    curves.iter().for_each(|(e, _)| {
+pub fn enter_transform_curve(
+    mut commands: Commands,
+    curves: Query<(Entity, &SelectedCurve, &Transform)>,
+) {
+    curves.iter().for_each(|(e, s, t)| {
+        let pt =
+            s.0.control_points_iter()
+                .map(|pt| Vec3::new(pt.x, pt.y, pt.z))
+                .sum::<Vec3>()
+                / (s.0.control_points().len() as f32);
         commands.entity(e).log_components();
         commands
             .entity(e)
@@ -15,7 +24,8 @@ pub fn enter_transform_curve(mut commands: Commands, curves: Query<(Entity, &Sel
             .insert(PickableBundle {
                 selection: PickSelection { is_selected: true },
                 ..Default::default()
-            });
+            })
+            .insert(RotationOriginOffset(pt.into()));
     });
 }
 

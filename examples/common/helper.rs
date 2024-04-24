@@ -51,7 +51,7 @@ pub fn spawn_curve(
         VertexAttributeValues::Float32x3(line_vertices),
     );
     commands.spawn((
-        ProfileCurve(curve),
+        ProfileCurve::new(curve),
         MaterialMeshBundle {
             mesh: meshes.add(line),
             material: line_materials.add(LineMaterial { color }),
@@ -69,7 +69,7 @@ pub fn find_closest_curve<'a>(
     let origin = Vec3::ZERO;
     let direction = Vec3::Y;
     let transformed = curves.iter().map(|c| {
-        let transformed = c.0 .0.transformed(&c.1.compute_matrix().into());
+        let transformed = c.0.curve().transformed(&c.1.compute_matrix().into());
         (c, transformed)
     });
 

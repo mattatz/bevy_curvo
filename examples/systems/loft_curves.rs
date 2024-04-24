@@ -27,11 +27,14 @@ pub fn update_loft_curves(
             &others.iter().map(|(_, c, t)| (*c, *t)).collect::<Vec<_>>(),
             0.5,
         );
-        if let Some((_, tr, c)) = closest {
+        if let Some((prof, tr, c)) = closest {
             let tess = c.tessellate(None);
             gizmos.linestrip(tess.iter().map(|p| Vec3::from(*p)), Color::YELLOW);
             if mouse_button_input.just_pressed(MouseButton::Left) {
-                let found = curves.iter().find(|(_e, _, t)| *t == tr).map(|(e, _, _)| e);
+                let found = curves
+                    .iter()
+                    .find(|(_e, other, _)| other.id() == prof.id())
+                    .map(|(e, _, _)| e);
                 if let Some(found) = found {
                     setting.loft_curves_target.push(found);
                 }
@@ -39,7 +42,10 @@ pub fn update_loft_curves(
         }
 
         selected.iter().for_each(|(_, c, t)| {
-            let tess = c.0.transformed(&t.compute_matrix().into()).tessellate(None);
+            let tess = c
+                .curve()
+                .transformed(&t.compute_matrix().into())
+                .tessellate(None);
             gizmos.linestrip(tess.iter().map(|p| Vec3::from(*p)), Color::YELLOW_GREEN);
         });
     }
@@ -69,7 +75,7 @@ pub fn exit_loft_curves(
     if target.len() > 1 {
         let transformed = target
             .iter()
-            .map(|(c, t)| c.0.transformed(&t.compute_matrix().into()))
+            .map(|(c, t)| c.curve().transformed(&t.compute_matrix().into()))
             .collect::<Vec<_>>();
         let surface = NurbsSurface::try_loft(&transformed, Some(3));
         if let Ok(lofted) = surface {

@@ -18,12 +18,12 @@ pub fn update_idle(
 ) {
     if let Some(cursor_ray) = **cursor_ray {
         let closest = find_closest_curve(cursor_ray, &curves.iter().collect::<Vec<_>>(), 0.5);
-        if let Some((curve, tr, transformed)) = closest {
+        if let Some((prof, tr, transformed)) = closest {
             let tess = transformed.tessellate(Some(1e-4));
             gizmos.linestrip(tess.iter().map(|p| Vec3::from(*p)), Color::YELLOW);
             if mouse_button_input.just_pressed(MouseButton::Left) {
                 commands.spawn((
-                    SelectedCurve(curve.0.clone()),
+                    SelectedCurve(prof.curve().clone()),
                     *tr,
                     GlobalTransform::default(),
                 ));

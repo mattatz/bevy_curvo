@@ -1,11 +1,9 @@
-use std::cmp::Ordering;
-
 use bevy::prelude::*;
 use bevy_curvo::prelude::NurbsSurfaceMesh;
 use bevy_mod_raycast::prelude::*;
 use bevy_normal_material::material::NormalMaterial;
 use curvo::prelude::{AdaptiveTessellationOptions, NurbsSurface, Transformable};
-use nalgebra::{Point3, Translation3, Vector3};
+use nalgebra::{Translation3, Vector3};
 
 use crate::{find_closest_curve, AppState, ExtrudeCurve, ProfileCurve};
 

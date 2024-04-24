@@ -1,10 +1,10 @@
-use bevy::{prelude::*, render::mesh::VertexAttributeValues};
+use bevy::prelude::*;
 use bevy_mod_raycast::prelude::*;
 use bevy_normal_material::material::NormalMaterial;
 use curvo::prelude::NurbsCurve3D;
 use nalgebra::Point3;
 
-use crate::{spawn_interp_curve, AppState, InterpolateCurve, LineMaterial, ProfileCurve};
+use crate::{spawn_interp_curve, AppState, InterpolateCurve, LineMaterial};
 
 pub fn enter_interpolate_curve(mut commands: Commands) {
     commands.spawn((InterpolateCurve::default(),));

@@ -1,18 +1,15 @@
-use std::cmp::Ordering;
-
-use bevy::{input::keyboard::Key, prelude::*};
+use bevy::prelude::*;
 use bevy_curvo::prelude::NurbsSurfaceMesh;
 use bevy_mod_raycast::prelude::*;
 use bevy_normal_material::material::NormalMaterial;
 use curvo::prelude::{AdaptiveTessellationOptions, NurbsSurface, Transformable};
-use nalgebra::{Point3, Translation3, Vector3};
 
-use crate::{find_closest_curve, AppState, ExtrudeCurve, ProfileCurve, Setting};
+use crate::{find_closest_curve, AppState, ProfileCurve, Setting};
 
 pub fn update_loft_curves(
     mut next_state: ResMut<NextState<AppState>>,
     mut setting: ResMut<Setting>,
-    mut commands: Commands,
+    _commands: Commands,
     mouse_button_input: Res<ButtonInput<MouseButton>>,
     key_input: Res<ButtonInput<KeyCode>>,
     cursor_ray: Res<CursorRay>,
@@ -34,7 +31,7 @@ pub fn update_loft_curves(
             let tess = c.tessellate(None);
             gizmos.linestrip(tess.iter().map(|p| Vec3::from(*p)), Color::YELLOW);
             if mouse_button_input.just_pressed(MouseButton::Left) {
-                let found = curves.iter().find(|(e, _, t)| *t == tr).map(|(e, _, _)| e);
+                let found = curves.iter().find(|(_e, _, t)| *t == tr).map(|(e, _, _)| e);
                 if let Some(found) = found {
                     setting.loft_curves_target.push(found);
                 }

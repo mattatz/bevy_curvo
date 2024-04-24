@@ -3,7 +3,7 @@ mod components;
 mod materials;
 mod systems;
 
-use bevy_inspector_egui::{quick::WorldInspectorPlugin, DefaultInspectorConfigPlugin};
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_transform_gizmo::{GizmoPickSource, TransformGizmoPlugin};
 use common::*;
 use components::*;
@@ -13,7 +13,10 @@ use systems::*;
 
 use bevy::{core::Zeroable, prelude::*, window::close_on_esc};
 
-use bevy_egui::{egui::{self, util::undoer::Settings}, EguiContexts, EguiPlugin};
+use bevy_egui::{
+    egui::{self},
+    EguiContexts, EguiPlugin,
+};
 use bevy_infinite_grid::{InfiniteGridBundle, InfiniteGridPlugin};
 
 use bevy_mod_picking::prelude::*;
@@ -42,8 +45,7 @@ struct AppPlugin;
 
 impl Plugin for AppPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
-        app
-            .insert_resource(Setting::default())
+        app.insert_resource(Setting::default())
             .insert_state(AppState::Idle)
             .add_systems(Startup, setup)
             .add_systems(Update, close_on_esc)

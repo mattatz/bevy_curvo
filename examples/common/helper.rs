@@ -2,16 +2,16 @@ use std::cmp::Ordering;
 
 use bevy::{
     asset::Assets,
-    ecs::system::{Commands, Query, Res, ResMut},
+    ecs::system::{Commands, ResMut},
     math::{primitives::Plane3d, Ray3d, Vec3},
     pbr::MaterialMeshBundle,
     render::{
         color::Color,
         mesh::{Mesh, VertexAttributeValues},
     },
-    transform::components::{GlobalTransform, Transform},
+    transform::components::Transform,
 };
-use bevy_mod_raycast::CursorRay;
+
 use curvo::prelude::{NurbsCurve3D, Transformable};
 use nalgebra::Point3;
 

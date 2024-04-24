@@ -1,10 +1,6 @@
-use std::cmp::Ordering;
-
 use bevy::prelude::*;
 use bevy_mod_raycast::CursorRay;
 use bevy_panorbit_camera::PanOrbitCamera;
-use curvo::prelude::Transformable;
-use nalgebra::{Point3, Reflection3, Unit, Vector3};
 
 use crate::{find_closest_curve, AppState, ProfileCurve, SelectedCurve};
 
@@ -28,7 +24,7 @@ pub fn update_idle(
             if mouse_button_input.just_pressed(MouseButton::Left) {
                 commands.spawn((
                     SelectedCurve(curve.0.clone()),
-                    tr.clone(),
+                    *tr,
                     GlobalTransform::default(),
                 ));
                 next_state.set(AppState::Select);

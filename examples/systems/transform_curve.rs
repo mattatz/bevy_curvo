@@ -1,16 +1,12 @@
-use std::cmp::Ordering;
-
 use bevy::prelude::*;
-use bevy_mod_picking::{focus::PickingInteraction, selection::PickSelection, PickableBundle};
-use bevy_mod_raycast::CursorRay;
-use bevy_panorbit_camera::PanOrbitCamera;
-use bevy_transform_gizmo::{GizmoTransformable, TransformGizmoBundle};
+use bevy_mod_picking::{selection::PickSelection, PickableBundle};
+
+use bevy_transform_gizmo::GizmoTransformable;
 use curvo::prelude::Transformable;
-use nalgebra::Point3;
 
-use crate::{spawn_curve, spawn_interp_curve, AppState, LineMaterial, ProfileCurve, SelectedCurve};
+use crate::{spawn_curve, AppState, LineMaterial, SelectedCurve};
 
-pub fn enter_transform_curve(mut commands: Commands, mut curves: Query<(Entity, &SelectedCurve)>) {
+pub fn enter_transform_curve(mut commands: Commands, curves: Query<(Entity, &SelectedCurve)>) {
     curves.iter().for_each(|(e, _)| {
         commands.entity(e).log_components();
         commands
@@ -25,8 +21,8 @@ pub fn enter_transform_curve(mut commands: Commands, mut curves: Query<(Entity, 
 
 pub fn update_transform_curve(
     mut next_state: ResMut<NextState<AppState>>,
-    mut commands: Commands,
-    mouse_button_input: Res<ButtonInput<MouseButton>>,
+    _commands: Commands,
+    _mouse_button_input: Res<ButtonInput<MouseButton>>,
     curves: Query<(&SelectedCurve, &Transform, &PickSelection)>,
     mut gizmos: Gizmos,
 ) {
@@ -57,7 +53,7 @@ pub fn exit_transform_curve(
                 &mut commands,
                 &mut meshes,
                 &mut line_materials,
-                Some(tr.clone()),
+                Some(*tr),
                 Color::ALICE_BLUE,
             );
         }

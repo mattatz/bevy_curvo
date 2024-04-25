@@ -21,7 +21,7 @@ pub fn update_extrude_curve(
     if let Some(cursor_ray) = **cursor_ray {
         let n = extrusion.iter().count();
         if n == 0 {
-            let closest = find_closest_curve(cursor_ray, &curves.iter().collect::<Vec<_>>(), 0.5);
+            let closest = find_closest_curve(cursor_ray, &curves.iter().collect::<Vec<_>>(), 1.0);
             if let Some((prof, _, c)) = closest {
                 let tess = c.tessellate(None);
                 gizmos.linestrip(tess.iter().map(|p| Vec3::from(*p)), Color::YELLOW);

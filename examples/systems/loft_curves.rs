@@ -25,7 +25,7 @@ pub fn update_loft_curves(
         let closest = find_closest_curve(
             cursor_ray,
             &others.iter().map(|(_, c, t)| (*c, *t)).collect::<Vec<_>>(),
-            0.5,
+            1.0,
         );
         if let Some((prof, _tr, c)) = closest {
             let tess = c.tessellate(None);

@@ -20,7 +20,7 @@ pub fn update_idle(
         let closest = find_closest_curve(
             cursor_ray,
             &curves.iter().map(|(_, p, t)| (p, t)).collect::<Vec<_>>(),
-            0.5,
+            1.0,
         );
         if let Some((prof, _tr, transformed)) = closest {
             let tess = transformed.tessellate(Some(1e-4));

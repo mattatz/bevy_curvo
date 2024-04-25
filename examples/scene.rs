@@ -166,12 +166,16 @@ fn update_ui(
     egui::Window::new("bevy_curvo example")
         .collapsible(false)
         .drag_to_scroll(false)
+        .default_width(420.)
+        .min_width(420.)
+        .max_width(420.)
         .show(contexts.ctx_mut(), |ui| {
             ui.label(format!("# of curves: {}", number_of_curves));
             ui.spacing();
 
             ui.heading("mode");
             ui.group(|group| {
+                group.horizontal(|group| {
                 if group
                     .add_enabled(
                         true,
@@ -211,24 +215,40 @@ fn update_ui(
                 {
                     next_state.set(AppState::LoftCurves);
                 }
+
+                });
             });
 
             ui.spacing();
 
             match current_state {
-                AppState::Idle => {}
+                AppState::Idle => {
+                    ui.label("Select modeling mode or select a curve to transform.");
+                }
                 AppState::Select => {
-                    ui.heading("selection");
+                    ui.heading("selection mode");
+                    ui.label("transform curve.");
+                    if ui.button("cancel").clicked() {
+                        next_state.set(AppState::Idle);
+                    }
                 }
                 AppState::InterpolateCurve => {
-                    ui.heading("interpolate curve");
+                    ui.heading("interpolate curve mode");
+                    ui.label("click to add a point & interpolate curve with the points.\npress enter to confirm.");
                     if ui.button("confirm").clicked() {
                         next_state.set(AppState::Idle);
                     }
                 }
-                AppState::ExtrudeCurve => {}
+                AppState::ExtrudeCurve => {
+                    ui.heading("extrude curve mode");
+                    ui.label("select a curve & extrude it to create a surface.");
+                    if ui.button("cancel").clicked() {
+                        next_state.set(AppState::Idle);
+                    }
+                }
                 AppState::LoftCurves => {
-                    ui.heading("loft curves");
+                    ui.heading("loft curves mode");
+                    ui.label("select curves to loft.\npress enter to confirm.");
                     if ui.button("confirm").clicked() {
                         next_state.set(AppState::Idle);
                     }

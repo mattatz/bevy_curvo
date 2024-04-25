@@ -9,6 +9,8 @@
 
 [Demo](https://github.com/mattatz/bevy_curvo/assets/1085910/5a6864c5-85fa-44ee-b194-23aaa8ff452a)
 
+*You can try the demo on web. https://mattatz.github.io/bevy_curvo/*
+
 ## Usage
 
 ```rust

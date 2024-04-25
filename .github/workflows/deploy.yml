@@ -21,6 +21,10 @@ jobs:
         override: true
     - uses: davidB/rust-cargo-make@v1
     - uses: actions/checkout@v1
+
+    - name: Install wasm32-unknown-unknown target
+      run: rustup target add wasm32-unknown-unknown
+    
     - name: Run build
       run: cargo make build-wasm
 

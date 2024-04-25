@@ -49,6 +49,26 @@ let tri: Mesh = surface_mesh.build_surface_triangle_list(Some(RenderAssetUsages:
 
 ```
 
+## Run the example
+
+```sh
+cargo run --example scene --features=examples
+```
+
+or with [cargo-make](https://github.com/sagiegurari/cargo-make)
+
+```sh
+cargo make example
+```
+
+## Run the example in the browser
+
+By using [cargo-make](https://github.com/sagiegurari/cargo-make), wasm files are generated using wasm-bindgen-cli, and web applications are served using an http server.
+
+```sh
+cargo make serve
+```
+
 ## Compatibility
 
 | bevy | bevy_curvo |

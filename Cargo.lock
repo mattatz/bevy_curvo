@@ -453,7 +453,7 @@ dependencies = [
 
 [[package]]
 name = "bevy_curvo"
-version = "0.1.3"
+version = "0.1.4"
 dependencies = [
  "anyhow",
  "bevy",
@@ -679,6 +679,7 @@ dependencies = [
  "bevy_reflect",
  "bevy_render",
  "bevy_scene",
+ "bevy_sprite",
  "bevy_tasks",
  "bevy_time",
  "bevy_transform",
@@ -779,9 +780,9 @@ dependencies = [
 
 [[package]]
 name = "bevy_normal_material"
-version = "0.5.0"
+version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e72a9205cd738e730fbb8b7e2e81addd8341e76ddccd6878ca7015c9289fc450"
+checksum = "7ca8a05063e48242979523b20268203392b1021113f78361405ee1c47ec19419"
 dependencies = [
  "bevy",
 ]

@@ -1,0 +1,21 @@
+
+[tasks.example]
+description = "Run the example"
+command = "cargo"
+args = ["run", "--example", "scene", "--features", "examples"]
+
+[tasks.build-wasm]
+install_crate = "wasm-bindgen-cli"
+description = "Build the example as web app"
+script = '''
+cargo build --target=wasm32-unknown-unknown --release --example scene --features=examples
+wasm-bindgen --out-dir web/pkg --no-typescript --target web target/wasm32-unknown-unknown/release/examples/scene.wasm
+'''
+
+[tasks.serve]
+install_crate = "simple-http-server"
+description = "Serve the example as web app on localhost"
+script = '''
+simple-http-server --index --nocache ./web
+'''
+dependencies = ["build-wasm"]

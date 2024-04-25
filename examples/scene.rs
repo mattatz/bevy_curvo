@@ -27,11 +27,11 @@ use bevy_points::{plugin::PointsPlugin, prelude::PointsMaterial};
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugins(MaterialPlugin::<LineMaterial>::default())
         .add_plugins(InfiniteGridPlugin)
         .add_plugins(PanOrbitCameraPlugin)
         .add_plugins(PointsPlugin)
         .add_plugins(NormalMaterialPlugin)
+        .add_plugins(LineMaterialPlugin)
         .add_plugins(DefaultRaycastingPlugin)
         .add_plugins((DefaultPickingPlugins, TransformGizmoPlugin::default()))
         .add_plugins(EguiPlugin)

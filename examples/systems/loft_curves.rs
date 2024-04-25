@@ -65,17 +65,12 @@ pub fn exit_loft_curves(
     let target = setting
         .loft_curves_target
         .iter()
-        .filter_map(|e| {
-            curves
-                .iter()
-                .find(|(e2, _, _)| *e2 == *e)
-                .map(|(_, c, t)| (c, t))
-        })
+        .filter_map(|e| curves.iter().find(|(e2, _, _)| *e2 == *e))
         .collect::<Vec<_>>();
     if target.len() > 1 {
         let transformed = target
             .iter()
-            .map(|(c, t)| c.curve().transformed(&t.compute_matrix().into()))
+            .map(|(_e, c, t)| c.curve().transformed(&t.compute_matrix().into()))
             .collect::<Vec<_>>();
         let surface = NurbsSurface::try_loft(&transformed, Some(3));
         if let Ok(lofted) = surface {
@@ -95,6 +90,10 @@ pub fn exit_loft_curves(
                 })
                 .insert(Name::new("lofted"));
         }
+
+        target.iter().for_each(|(e, _, _)| {
+            commands.entity(*e).despawn();
+        });
     }
 
     setting.loft_curves_target.clear();

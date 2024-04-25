@@ -37,8 +37,8 @@ bevy-inspector-egui = { version = "0.24.0" }
 
 
 [features]
-# default = []
-default = ["examples"] # for debug a example
+default = []
+# default = ["examples"] # for debug a example
 examples = [
   "bevy/bevy_core_pipeline",
   "bevy/bevy_gizmos",

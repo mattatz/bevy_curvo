@@ -10,6 +10,8 @@ use bevy::{
     },
 };
 
+const SHADER_HANDLE: Handle<Shader> = Handle::weak_from_u128(16376858152701542574);
+
 #[derive(Asset, TypePath, Default, AsBindGroup, Debug, Clone)]
 pub struct LineMaterial {
     #[uniform(0)]
@@ -18,17 +20,25 @@ pub struct LineMaterial {
 
 impl Material for LineMaterial {
     fn fragment_shader() -> ShaderRef {
-        "shaders/line_material.wgsl".into()
+        ShaderRef::Handle(SHADER_HANDLE.clone())
     }
+}
 
-    fn specialize(
-        _pipeline: &MaterialPipeline<Self>,
-        descriptor: &mut RenderPipelineDescriptor,
-        _layout: &MeshVertexBufferLayout,
-        _key: MaterialPipelineKey<Self>,
-    ) -> Result<(), SpecializedMeshPipelineError> {
-        // This is the important part to tell bevy to render this material as a line between vertices
-        descriptor.primitive.polygon_mode = PolygonMode::Line;
-        Ok(())
+use bevy::{
+    asset::load_internal_asset,
+    prelude::{MaterialPlugin, Plugin, Shader},
+};
+
+pub struct LineMaterialPlugin;
+
+impl Plugin for LineMaterialPlugin {
+    fn build(&self, app: &mut bevy::prelude::App) {
+        load_internal_asset!(
+            app,
+            SHADER_HANDLE,
+            "../shaders/line_material.wgsl",
+            Shader::from_wgsl
+        );
+        app.add_plugins(MaterialPlugin::<LineMaterial>::default());
     }
 }

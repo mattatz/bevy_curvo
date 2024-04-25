@@ -11,6 +11,9 @@ keywords = ["bevy", "gamedev", "graphics", "modeling"]
 license = "MIT"
 readme = "README.md"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
 anyhow = "1.0.81"
 nalgebra = { version = "0.32.5", features = [
@@ -26,7 +29,7 @@ version = "0.13.2"
 
 [dev-dependencies]
 bevy_infinite_grid = { version = "0.12" }
-bevy_normal_material = { version = "0.5.0" }
+bevy_normal_material = { version = "0.5.2" }
 bevy_panorbit_camera = { version = "0.17.0" }
 bevy_points = { version = "0.5.1" }
 bevy_mod_raycast = { version = "0.17.0" }
@@ -35,7 +38,6 @@ bevy_transform_gizmo = { version = "0.11.0" }
 bevy_mod_picking = { version = "0.18.2", default-features = false }
 bevy-inspector-egui = { version = "0.24.0" }
 
-
 [features]
 default = []
 # default = ["examples"] # for debug a example
@@ -43,7 +45,10 @@ examples = [
   "bevy/bevy_core_pipeline",
   "bevy/bevy_gizmos",
   "bevy/bevy_winit",
-  "bevy/x11"
+  "bevy/x11",
+  # "bevy/webgpu"
+  "bevy/webgl2",
+  "bevy_normal_material/webgl"
 ]
 
 [[example]]

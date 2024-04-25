@@ -22,16 +22,24 @@ pub fn update_extrude_curve(
         let n = extrusion.iter().count();
         if n == 0 {
             let closest = find_closest_curve(cursor_ray, &curves.iter().collect::<Vec<_>>(), 0.5);
-            if let Some((_, _, c)) = closest {
+            if let Some((prof, _, c)) = closest {
                 let tess = c.tessellate(None);
                 gizmos.linestrip(tess.iter().map(|p| Vec3::from(*p)), Color::YELLOW);
                 if mouse_button_input.just_pressed(MouseButton::Left) {
-                    commands.spawn(ExtrudeCurve(c.clone()));
+                    commands.spawn(ExtrudeCurve(prof.id()));
                 }
             }
         } else {
             let target = extrusion.single();
-            let tess = target.0.tessellate(None);
+            let curve = curves
+                .iter()
+                .find(|(prof, _)| prof.id() == target.0)
+                .unwrap();
+            let transformed = curve
+                .0
+                .curve()
+                .transformed(&curve.1.compute_matrix().into());
+            let tess = transformed.tessellate(None);
             gizmos.linestrip(tess.iter().map(|p| Vec3::from(*p)), Color::YELLOW);
 
             if let Some(d) =
@@ -39,14 +47,12 @@ pub fn update_extrude_curve(
             {
                 let p = cursor_ray.get_point(d);
                 let elevation = p.y.abs();
-                let offset = target
-                    .0
-                    .transformed(&Translation3::new(0., elevation, 0.).into());
+                let offset = transformed.transformed(&Translation3::new(0., elevation, 0.).into());
                 let tess = offset.tessellate(None);
                 gizmos.linestrip(tess.iter().map(|p| Vec3::from(*p)), Color::YELLOW);
                 if mouse_button_input.just_pressed(MouseButton::Left) {
                     next_state.set(AppState::Idle);
-                    let extruded = NurbsSurface::extrude(&target.0, Vector3::y() * elevation);
+                    let extruded = NurbsSurface::extrude(&transformed, Vector3::y() * elevation);
                     let tess = extruded.tessellate(Some(AdaptiveTessellationOptions {
                         norm_tolerance: 1e-2 * 2.5,
                         ..Default::default()
@@ -68,8 +74,16 @@ pub fn update_extrude_curve(
     }
 }
 
-pub fn exit_extrude_curve(mut commands: Commands, extrusion: Query<Entity, With<ExtrudeCurve>>) {
-    extrusion.iter().for_each(|e| {
+pub fn exit_extrude_curve(
+    mut commands: Commands,
+    extrusion: Query<(Entity, &ExtrudeCurve)>,
+    curves: Query<(Entity, &ProfileCurve)>,
+) {
+    extrusion.iter().for_each(|(e, extrude)| {
         commands.entity(e).despawn();
+        let found = curves.iter().find(|(_, prof)| prof.id() == extrude.0);
+        if let Some(found) = found {
+            commands.entity(found.0).despawn();
+        }
     });
 }

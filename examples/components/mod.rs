@@ -24,7 +24,7 @@ impl ProfileCurve {
 }
 
 #[derive(Component, Debug)]
-pub struct ExtrudeCurve(pub NurbsCurve3D<f32>);
+pub struct ExtrudeCurve(pub Uuid);
 
 #[derive(Component, Debug)]
-pub struct SelectedCurve(pub NurbsCurve3D<f32>);
+pub struct SelectedCurve;

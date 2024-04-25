@@ -3,7 +3,6 @@ mod components;
 mod materials;
 mod systems;
 
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_transform_gizmo::{GizmoPickSource, TransformGizmoPlugin};
 use common::*;
 use components::*;
@@ -11,7 +10,7 @@ use materials::*;
 use nalgebra::Point3;
 use systems::*;
 
-use bevy::{core::Zeroable, prelude::*, window::close_on_esc};
+use bevy::{core::Zeroable, prelude::*};
 
 use bevy_egui::{
     egui::{self},
@@ -36,7 +35,7 @@ fn main() {
         .add_plugins(DefaultRaycastingPlugin)
         .add_plugins((DefaultPickingPlugins, TransformGizmoPlugin::default()))
         .add_plugins(EguiPlugin)
-        .add_plugins(WorldInspectorPlugin::new())
+        // .add_plugins(WorldInspectorPlugin::new())
         .add_plugins(AppPlugin)
         .run();
 }
@@ -48,14 +47,13 @@ impl Plugin for AppPlugin {
         app.insert_resource(Setting::default())
             .insert_state(AppState::Idle)
             .add_systems(Startup, setup)
-            .add_systems(Update, close_on_esc)
             .add_systems(
                 PreUpdate,
                 (absorb_egui_inputs,)
                     .after(bevy_egui::systems::process_input_system)
                     .before(bevy_egui::EguiSet::BeginFrame),
             )
-            .add_systems(Update, (update_ui, visualize_geometry))
+            .add_systems(Update, (detect_mode_reset, update_ui, visualize_geometry))
             .add_systems(OnEnter(AppState::Idle), (enter_idle,))
             .add_systems(Update, update_idle.run_if(in_state(AppState::Idle)))
             .add_systems(OnExit(AppState::Idle), (exit_idle,))
@@ -146,19 +144,32 @@ fn setup(
     );
 }
 
+fn detect_mode_reset(
+    mut next_state: ResMut<NextState<AppState>>,
+    key_button_input: Res<ButtonInput<KeyCode>>,
+) {
+    if key_button_input.just_pressed(KeyCode::Escape) {
+        next_state.set(AppState::Idle);
+    }
+}
+
 fn update_ui(
     mut contexts: EguiContexts,
     current_state: Res<State<AppState>>,
     mut next_state: ResMut<NextState<AppState>>,
     curves: Query<&ProfileCurve>,
 ) {
-    let has_profile_curves = curves.iter().count() > 0;
+    let number_of_curves = curves.iter().count();
+    let has_profile_curves = number_of_curves > 0;
     let current_state = current_state.get();
 
     egui::Window::new("bevy_curvo example")
         .collapsible(false)
         .drag_to_scroll(false)
         .show(contexts.ctx_mut(), |ui| {
+            ui.label(format!("# of curves: {}", number_of_curves));
+            ui.spacing();
+
             ui.heading("mode");
             ui.group(|group| {
                 if group
